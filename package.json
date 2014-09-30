@@ -1,11 +1,11 @@
 {
-  "name": "reveal-template",
-  "version": "0.0.3",
-  "description": "Template for reveal.js",
+  "name": "moo_grails_training",
+  "version": "0.0.1",
+  "description": "Mutual Of Omaha - Intro To Grails Training",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mrkelly/reveal-template.git"
+    "url": "https://github.com/nllarson/moo_grails_training.git"
   },
   "keywords": [
     "reveal",
@@ -13,10 +13,10 @@
     "js",
     "presentation"
   ],
-  "author": "Michael Kelly",
+  "author": "Nick Larson",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mrkelly/reveal-template/issues"
+    "url": "https://github.com/nllarson/moo_grails_training/issues"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

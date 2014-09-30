@@ -1,7 +1,5 @@
-reveal-template
+moo_grails_training
 ===============
-
-#Reveal.js Template
 
 
 ## Dependencies

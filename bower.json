@@ -1,6 +1,6 @@
 {
-  "name": "reveal-template",
-  "version": "0.0.3",
+  "name": "moo_grails_training",
+  "version": "0.0.1",
   "ignore": [
     "**/.*",
     "node_modules",
