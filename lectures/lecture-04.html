@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Lecture 04 - Groovy - Collections</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Lecture 04 - Groovy - Collections">
+    <link href="/grails-training/assets/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/grails-training/assets/js/angular.js"></script>
+    <script type="text/javascript">
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = '/grails-training/assets/css/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+      
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="opi-logo"></div>
+      <div class="slides">
+        <section data-state="index-slide" class="index-section">
+          <h3>Groovy - Collections</h3>
+          <h4>Lecture 04</h4>
+        </section>
+        <section>
+          <h3>Groovy Lists</h3>
+          <pre><code class="groovy">
+// create a new list
+def employees = []
+
+// add an employee to the list
+employees.add(new Employee(firstName: 'Steve'))
+
+// use operator overloading to add another
+employees << new Employee(firstName: 'Peter')
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>size()</h3>
+          <p>.size() works on everything in Groovy, unlike Java.  (.length, .size(), etc)</p><br>
+          <pre><code class="groovy">
+  def employees = [
+  new Employee(firstName: 'Steve'),
+  new Employee(firstName: 'Bruce'),
+  new Employee(firstName: 'Peter') ]
+  println employees.size()
+  => 3
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Indexed Access</h3>
+          <p>Array-like indexed access into the list</p><br>
+          <pre><code class="groovy" data-trim>
+println employees[0]
+==> Steve
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Closures</h3>
+          <p>Very large piece of dynamic languages.  Here we are just going to touch on them.  Understanding the basics will help a lot.  They are used pretty much ALL OVER Groovy code.</p>
+          <ul>
+            <li>similar to code blocks or lambda expressions in other languages</li>
+            <li>can be called like a method</li>
+            <li>code as data
+              <ul>
+                <li>assign code blocks to variables</li>
+                <li>pass them into methods</li>
+                <li>return them from methods</li>
+              </ul>
+            </li>
+          </ul>
+          <pre><code class="groovy">
+def shout = {String s -> println s.toUpperCase()}
+shout 'Steve'
+=> STEVE
+</code>
+</pre>
+        </section>
+        <section>
+          <section>
+            <h3>Looping with closures</h3>
+            <p>Most interesting methods on Collections take closures as arguments</p>
+          </section>
+          <section>
+            <p>.each allows you to iterate over a list</p>
+            <pre><code class="groovy">
+employees.each{employee ->
+  println employee.firstName
+}
+==> Steve
+==> Peter
+==> Bruce
+</code></pre>
+          </section>
+          <section>
+            <p>default item in a collect is it - but cannot nest it</p>
+            <pre><code class="groovy">
+employees.each{
+  println it.firstName
+}
+==> Steve
+==> Peter
+==> Bruce
+</code></pre>
+          </section>
+          <section>
+            <p>The default iterator is GREAT for one-liners</p>
+            <pre><code class="groovy">
+employees.each{println it.firstName}
+==> Steve
+==> Peter
+==> Bruce
+</code>
+</pre>
+          </section>
+        </section>
+        <section>
+          <h3>Looping with For Statement</h3>
+          <pre><code class="groovy">
+for (employee in employees) {
+  println employee.firstName.toUpperCase()
+}
+==> STEVE
+==> PETER
+==> BRUCE
+</code>
+</pre>
+        </section>
+        <section>
+          <section>
+            <h3>Collect Values from List</h3>
+          </section>
+          <section>
+            <p>Say I want a list of employee first names</p>
+            <pre><code class="groovy">
+//.collect{}
+def firstNames = employees.collect{it.firstName}
+println firstNames
+==> ['Steve', 'Peter', 'Bruce']
+</code>
+</pre>
+          </section>
+          <section>
+            <p>GROOVIER</p>
+            <pre><code glass="groovy">
+// Spread operator
+def firstNames = employees*.firstName
+println firstNames
+==>['Steve', 'Peter', 'Bruce']
+</code>
+</pre>
+          </section>
+        </section>
+        <section>
+          <h3>Filter Lists</h3>
+          <pre><code class="groovy">
+def employees = [
+  new Employee(firstName: 'Steve', middleInitial: 'G', lastName: 'Rogers'),
+  new Employee(firstName: 'Bruce', lastName: 'Banner'),
+  new Employee(firstName: 'Peter', lastName: 'Parker')
+]
+// find first occurrence
+employees.find { it.firstName == 'Bruce' }
+=> Bruce Banner
+
+// findAll returns a collection, ||  or operator
+employees.findAll { it.firstName.startsWith('S') || it.lastName.startsWith('P') }
+=> [ 'Steve G Rogers', 'Peter Parker']
+// groovy truthiness finds all employees with a middle initial
+employees.findAll { it.middleInitial }
+=> [Steve G Rogers]
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>List - Operator Overloading - + , <<</h3>
+          <pre><code class="groovy">
+println ['Steve','Bruce'].add('Peter')
+=> ['Steve','Bruce','Peter']
+println ['Steve','Bruce'] + 'Peter'
+=> ['Steve','Bruce','Peter']
+println ['Steve','Bruce'] << 'Peter'
+=> ['Steve','Bruce','Peter']
+
+println ['Steve','Bruce'].addAll( ['Peter', 'Donald'] )
+=> ['Steve', 'Bruce', 'Peter', 'Donald']
+println ['Steve', 'Bruce'] + ['Peter', 'Donald']
+=> ['Steve','Bruce','Peter', 'Donald']
+println ['Steve','Bruce'] << ['Peter','Donald']
+=> ['Steve','Bruce', ['Peter','Donald']]
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>List - Destructive Methods</h3>
+          <p>Some methods mutate the list, others return a new list</p>
+          <pre><code class="groovy">
+def employees = [
+  new Employee(firstName: 'Steve'),
+  new Employee(firstName: 'Bruce'),
+  new Employee(firstName: 'Peter')
+]
+
+def steve = employees[0]
+println employees - steve
+=> ['Bruce','Peter']
+
+println employees.size()
+=> 3
+
+println employees.remove(steve)
+=> ['Bruce','Peter']
+
+println employees.size()
+=> 2
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>List - Membership - any , every</h3>
+          <p>return boolean for meeting membership criteria</p><br>
+          <pre><code class="groovy">
+def employees = [
+  new Employee(firstName: 'Steve', middleInitial: 'G', lastName: 'Rogers'),
+  new Employee(firstName: 'Bruce', lastName: 'Banner'),
+  new Employee(firstName: 'Peter', lastName: 'Parker')
+]
+
+employees.any { it.firstName == 'Steve' }
+=> true
+employees.every { it.middleInitial }
+=> false
+employees.every { it.lastName && it.firstName }
+=> true
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>List - Sorting</h3>
+          <ul>
+            <li>.sort() can be called on any collection</li>
+            <li>.sort() can take a closure, so you don't need dedicated comparators</li>
+            <li>.sort(false) doesn't modify a collection, it returns a new one instead</li>
+          </ul>
+          <pre><code class="groovy">
+['Steve','Bruce','Peter'].sort()
+=> ['Bruce', 'Peter','Steve']
+
+employees.sort(false) { it.lastName }
+=> ['Bruce Banner', 'Peter Parker', 'Steve Rogers']
+
+employees
+=> ['Steve Rogers', 'Bruce Banner', 'Peter Parker']
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Ranges</h3>
+          <ul>
+            <li>1..10 is a list that includes integers from 1 to 10</li>
+            <li>These are often used for looping a certain number of times, or validating a size of a field (ie.. password 6..20)</li>
+          </ul>
+          <pre><code class="groovy">
+def one_to_ten = 1..10
+one_to_ten.size()
+=> 10
+
+one_to_ten.each { print it}
+=>12345678910
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Groovy Maps</h3>
+          <ul>
+            <li>Maps are like dictionaries or association lists in other languages</li>
+            <li>key / value storage</li>
+          </ul>
+          <pre><code class="groovy">
+def m = [:]
+m.put('firstName', 'Steve')
+m.put('lastName', 'Rogers')
+println m
+=>[firstName:Steve, lastName:Rogers]
+
+def n = [firstName: 'Peter', lastName: 'Parker']
+println n
+=>[firstName:Peter, lastName:Parker]
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Maps - Accessing Values</h3>
+          <pre><code class="groovy">
+def m = [firstName: 'Steve', lastName: 'Rogers']
+
+// use dot notation for accessing values with Strings as keys
+m.firstName
+=> Steve
+
+// also use index notation
+println m['firstName']
+=> Steve
+
+// mutate value with assignment
+n = [:]
+n.firstName = 'Peter'
+n.lastName = 'Parker'
+n['firstName'] = 'Peter'
+n['lastName'] = 'Parker'
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Maps - Iterate through with .each</h3>
+          <pre><code class="groovy">
+def m = ['Captain America':'Steve Rogers', 'Spider Man':'Peter Parker']
+
+// each will automatically deconstruct the key/value pairs
+m.each { alias, realName ->
+  println "key: $alias  value: $realName"
+}
+
+=>
+key: Captain America  value: Steve Rogers
+key: Spider Man  value: Peter Parker
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Maps - Sorting</h3>
+          <ul>
+            <li>Maps don't have an order for elements</li>
+            <li>.sort() can take closure, so again, no need for comparators</li>
+            <li>.sort(false) does not modify a collection, returns new one instead</li>
+          </ul>
+          <pre><code class="groovy">
+['Steve':'Captain America','Bruce':'Hulk', 'Peter': 'Spiderman'].sort()
+=> ['Bruce':'Hulk', 'Peter':'Spiderman', 'Steve':'Captain America']
+
+employeeMap.sort(false) {e1, e2 -> e1.key <=> e2.key  }
+=> ['Bruce':'Hulk', 'Peter':'Spiderman', 'Steve':'Captain America']
+
+employeeMap
+=>['Steve':'Captain America','Bruce':'Hulk', 'Peter': 'Spiderman']
+</code>
+</pre>
+        </section>
+        <section data-state="index-slide" class="index-section">
+          <h3>You Try It!!</h3>
+          <h4>Lab 5</h4>
+        </section>
+      </div>
+    </div>
+    <script src="/grails-training/assets/js/app.js"></script>
+  </body>
+</html>
