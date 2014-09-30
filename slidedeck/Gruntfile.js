@@ -187,12 +187,12 @@ module.exports = function(grunt) {
       .use(redirect())
       .use(function(req, res, next) {
         if (req.url == '/') {
-          res.redirect('/grails-training');
+          res.redirect('/moo_grails_training');
         } else {
           next();
         }
       })
-      .use('/grails-training', connect.static('dist'))
+      .use('/moo_grails_training', connect.static('dist'))
       .listen(8001);
   });
 
