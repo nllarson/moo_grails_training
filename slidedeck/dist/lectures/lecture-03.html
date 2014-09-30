@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Lecture 03 - Groovy - Conditionals</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Lecture 03 - Groovy - Conditionals">
+    <link href="/grails-training/assets/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/grails-training/assets/js/angular.js"></script>
+    <script type="text/javascript">
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = '/grails-training/assets/css/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+      
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="opi-logo"></div>
+      <div class="slides">
+        <section data-state="index-slide" class="index-section">
+          <h3>Groovy - Conditionals</h3>
+          <h4>Lecture 03</h4>
+        </section>
+        <section>
+          <h3>Data types</h3>
+          <pre><code class="groovy">
+def a = 1           // Integer
+def b = 1.0         // BigDecimal
+def c = true        // Boolean
+def d = [1,2,3]     //ArrayList
+def e = [x:1, y:2]  //LinkedHashMap
+</code></pre><br>
+          <p>All data types are objects.  Primitives can be used but are autoboxed.</p>
+        </section>
+        <section>
+          <h3>Conditionals - 'if' Statements</h3>
+          <p>Basic syntax is similar to Java</p><br>
+          <pre><code class="groovy">
+if (some condition) {
+  do this
+} else {
+  do that
+}
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Groovy Truthiness</h3>
+          <p>In Java, only booleans are true or false. In Groovy, the truthiness is much broader: null, zero (0), empty strings, empty lists, and empty maps are false!</p><br>
+          <pre><code class="groovy" data-trim>
+def e = new Employee()
+if (e.firstName) {       // in Java, if (e.firstName != null)
+  println e.firstName
+} else {
+  println 'n/a'
+}
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Ternary Operator</h3>
+          <pre><code class="groovy">
+x ? xistrue : xisfalse
+</code></pre>
+          <ul>
+            <li>Not used much in Java, even though valid syntax.  Java is too verbose for 'one-liners'</li>
+            <li>Very idiomatic in Groovy</li>
+            <li>Less is BETTER!!!</li>
+          </ul><br>
+          <pre><code class="groovy">
+def e = new Employee()
+e.firstName ? println e.firstName : println 'n/a'
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Elvis Operator - ?:</h3>
+          <p>We see code like this very often.  Notice the repetition.</p><br>
+          <pre><code class="groovy">
+def e = new Employee()
+e.firstName ? println e.firstName : println 'n/a'
+</code></pre>
+          <p>We can do better:</p><br>
+          <pre><code class="groovy">
+def e = new Employee()
+println e.firstName ?: 'n/a'
+</code>
+</pre>
+        </section>
+        <section>
+          <section>
+            <h3>Groovy Null Safe Operator - ?.</h3>
+            <pre><code glass="groovy">
+object.method
+</code></pre>
+            <p>If object is NULL, a NullPointerException is thrown</p>
+          </section>
+          <section>
+            <pre><code glass="groovy">
+object?.method
+</code></pre>
+            <p>If object is NULL, the method is never called, so no NPE is thrown</p>
+          </section>
+          <section>
+            <pre><code class="groovy">
+def e    // oops - forgot to initialize e
+println e.firstName ?: 'n/a'
+=> throws an exception
+</code></pre>
+          </section>
+          <section>
+            <pre><code class="groovy">
+def e    // oops - forgot to initialize e
+println e.firstName ?: 'n/a'
+=> throws an exception
+
+// null safe returns null, which evaluates to false
+println e?.firstName ? e.firstName : 'n/a'
+==> n/a
+</code>
+</pre>
+          </section>
+        </section>
+        <section>
+          <h3>Equals vs Object Identity</h3>
+          <ul>
+            <li>Equals - same values</li>
+            <li>Object Identity - same object</li>
+          </ul>
+          <pre><code class="java">
+// Java
+a.equals(b) // Equals Check
+a == b      // Identity Check
+</code></pre><br>
+          <pre><code class="groovy">
+// Groovy
+a == b      // Equals Check
+a.is(b)     // Identity Check
+</code>
+</pre>
+        </section>
+        <section data-state="index-slide" class="index-section">
+          <h3>More Fun!!!</h3>
+          <h4>Lab 3 &amp; 4</h4>
+        </section>
+      </div>
+    </div>
+    <script src="/grails-training/assets/js/app.js"></script>
+  </body>
+</html>

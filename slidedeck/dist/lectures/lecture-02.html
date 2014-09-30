@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Lecture 02 - Groovy - Intro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Lecture 02 - Groovy - Intro">
+    <link href="/grails-training/assets/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/grails-training/assets/js/angular.js"></script>
+    <script type="text/javascript">
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = '/grails-training/assets/css/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+      
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="opi-logo"></div>
+      <div class="slides">
+        <section data-state="index-slide" class="index-section">
+          <h3>Groovy - Intro</h3>
+          <h4>Lecture 02</h4>
+        </section>
+        <section>
+          <p>Groovy is an agile and dynamic language for the Java Virtual Machine</p>
+          <ul>
+            <li>builds upon the strengths of Java but has additional power features inspired by languages like Python, Ruby and Smalltalk</li>
+            <li>makes modern programming features available to Java developers with almost-zero learning curveGrails is an Open Source, full stack, web application framework for the JVM. It takes advantage of the Groovy programming language and convention over configuration to provide a productive and stream-lined development experience.</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Groovy is Object Oriented</h3>
+          <ul>
+            <li>Code is organized into classes.</li>
+            <li>Classes
+              <ul>
+                <li>methods (procedures and functions)</li>
+                <li>properties (fields)</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h3>Simple Groovy Class</h3>
+          <pre><code class="groovy" data-trim>
+class Employee {
+  String username
+  String password
+  String firstName
+  String middleInitial
+  String lastName
+  String email
+  BigDecimal salary
+  
+  boolean enabled
+  boolean accountExpired
+  boolean accountLocked
+  boolean passwordExpired
+}
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Constructing New Objects</h3>
+          <pre><code class="groovy">
+def employee = new Employee()
+employee.firstName = 'Steve'
+employee.lastName = 'Rogers'
+employee.username = 'srogers'
+employee.password = 'CaptainAmerica'
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>name-argument Constructor</h3>
+          <pre><code class="groovy" data-trim>
+def employee = new Employee(firstName: 'Steve',
+                            lastName: 'Rogers',
+                            username: 'srogers',
+                            password: 'CaptainAmerica')
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>String</h3>
+          <p>Traditional String literal uses single quotes (')</p><br>
+          <pre><code class="groovy">
+def employee = new Employee(firstName: 'Steve', username: 'srogers')
+println 'Hello ' + employee.firstName + ' (' + employee.username + ')'
+==> Hello Steve (srogers)
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Groovy Strings or GStrings</h3>
+          <ul>
+            <li>supports embedded expressions</li>
+            <li>uses double (") quotes</li>
+            <li>braces are optional for simple expressions</li>
+          </ul><br>
+          <pre><code class="groovy">
+def employee = new Employee(firstName: 'Steve', username: 'srogers')
+println "Hello ${employee.firstName} (${employee.username})"
+==> Hello Steve (srogers)
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Creating Method - Similar to Java</h3>
+          <ul>
+            <li>same as functions, procedures</li>
+            <li>go inside of a class</li>
+          </ul><br>
+          <pre><code class="groovy">
+scope returnType methodName(zeroOrMoreArguments){
+  methodBody
+}
+</code></pre><br>
+          <pre><code class="groovy">
+public String toString() {
+  return "first: ${firstName} last: ${lastName} username: ${username}"
+}
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Groovier Methods</h3>
+          <ul>
+            <li>scope is optional - default is public</li>
+            <li>return type is optional - use def keyword for dynamically typed return value</li>
+            <li>types are optional for method arguments</li>
+            <li>return keyword is optional - value of last statement is returned</li>
+          </ul><br>
+          <pre><code class="java">
+// Java
+public String createGreeting(String greeting) {
+    return greeting + firstName;
+}
+</code></pre><br>
+          <pre><code class="groovy">
+// Groovy
+def createGreeting(greeting) {
+    "$greeting $firstName"
+}
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Using a Method</h3>
+          <pre><code class="groovy">
+def steveRogers = new Employee(username: 'srogers',
+                              password: 'CaptainAmerica'
+                              firstName: 'Steve',
+                              lastName: 'Rogers')
+// invoke a method on an object
+println steveRogers.toString()
+==> first: Steve last: Rogers username: srogers
+
+// call a method, passing a method argument
+println steveRogers.createGreeting('hello')
+==> hello Steve
+</code>
+</pre>
+        </section>
+        <section data-state="index-slide" class="index-section">
+          <h3>Groovy Basics</h3>
+          <h4>Lab 2</h4>
+        </section>
+      </div>
+    </div>
+    <script src="/grails-training/assets/js/app.js"></script>
+  </body>
+</html>

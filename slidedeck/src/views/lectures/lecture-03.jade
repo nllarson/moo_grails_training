@@ -1,0 +1,133 @@
+doctype html
+include ../includes/mixins
+
++page("Lecture 03 - Groovy - Conditionals")
+  +lecture-title-page("Groovy - Conditionals", "Lecture 03")
+
+  section
+    h3 Data types
+    pre.
+      <code class="groovy">
+      def a = 1           // Integer
+      def b = 1.0         // BigDecimal
+      def c = true        // Boolean
+      def d = [1,2,3]     //ArrayList
+      def e = [x:1, y:2]  //LinkedHashMap
+      </code>
+    br
+    p All data types are objects.  Primitives can be used but are autoboxed.
+
+  section
+    h3 Conditionals - 'if' Statements
+    p Basic syntax is similar to Java
+    br
+    pre.
+      <code class="groovy">
+      if (some condition) {
+        do this
+      } else {
+        do that
+      }
+      </code>
+
+  section
+    h3 Groovy Truthiness
+    p In Java, only booleans are true or false. In Groovy, the truthiness is much broader: null, zero (0), empty strings, empty lists, and empty maps are false!
+    br
+    pre.
+      <code class="groovy" data-trim>
+      def e = new Employee()
+      if (e.firstName) {       // in Java, if (e.firstName != null)
+        println e.firstName
+      } else {
+        println 'n/a'
+      }
+      </code>
+
+  section
+    h3 Ternary Operator
+    pre.
+      <code class="groovy">
+      x ? xistrue : xisfalse
+      </code>
+    ul
+      li Not used much in Java, even though valid syntax.  Java is too verbose for 'one-liners'
+      li Very idiomatic in Groovy
+      li Less is BETTER!!!
+    br
+    pre.
+      <code class="groovy">
+      def e = new Employee()
+      e.firstName ? println e.firstName : println 'n/a'
+      </code>
+
+  section
+    h3 Elvis Operator - ?:
+    p We see code like this very often.  Notice the repetition.
+    br
+    pre.
+      <code class="groovy">
+      def e = new Employee()
+      e.firstName ? println e.firstName : println 'n/a'
+      </code>
+    p We can do better:
+    br
+    pre.
+        <code class="groovy">
+        def e = new Employee()
+        println e.firstName ?: 'n/a'
+        </code>
+
+  section
+    section
+      h3 Groovy Null Safe Operator - ?.
+      pre.
+        <code glass="groovy">
+        object.method
+        </code>
+      p If object is NULL, a NullPointerException is thrown
+    section
+      pre.
+        <code glass="groovy">
+        object?.method
+        </code>
+      p If object is NULL, the method is never called, so no NPE is thrown
+    section
+      pre.
+        <code class="groovy">
+        def e    // oops - forgot to initialize e
+        println e.firstName ?: 'n/a'
+        => throws an exception
+        </code>
+    section
+      pre.
+        <code class="groovy">
+        def e    // oops - forgot to initialize e
+        println e.firstName ?: 'n/a'
+        => throws an exception
+
+        // null safe returns null, which evaluates to false
+        println e?.firstName ? e.firstName : 'n/a'
+        ==> n/a
+        </code>
+
+  section
+    h3 Equals vs Object Identity
+    ul
+      li Equals - same values
+      li Object Identity - same object
+    pre.
+      <code class="java">
+      // Java
+      a.equals(b) // Equals Check
+      a == b      // Identity Check
+      </code>
+    br
+    pre.
+      <code class="groovy">
+      // Groovy
+      a == b      // Equals Check
+      a.is(b)     // Identity Check
+      </code>
+
+  +lecture-title-page("More Fun!!!", "Lab 3 & 4")

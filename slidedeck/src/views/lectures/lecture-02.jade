@@ -1,0 +1,152 @@
+doctype html
+include ../includes/mixins
+
++page("Lecture 02 - Groovy - Intro")
+  +lecture-title-page("Groovy - Intro", "Lecture 02")
+
+  section
+    p Groovy is an agile and dynamic language for the Java Virtual Machine
+
+    ul
+      li builds upon the strengths of Java but has additional power features inspired by languages like Python, Ruby and Smalltalk
+      li makes modern programming features available to Java developers with almost-zero learning curveGrails is an Open Source, full stack, web application framework for the JVM. It takes advantage of the Groovy programming language and convention over configuration to provide a productive and stream-lined development experience.
+
+  section
+    h3 Groovy is Object Oriented
+
+    ul
+      li Code is organized into classes.
+      li Classes
+        ul
+          li methods (procedures and functions)
+          li properties (fields)
+
+  section
+    h3 Simple Groovy Class
+    pre.
+      <code class="groovy" data-trim>
+      class Employee {
+        String username
+        String password
+        String firstName
+        String middleInitial
+        String lastName
+        String email
+        BigDecimal salary
+
+        boolean enabled
+        boolean accountExpired
+        boolean accountLocked
+        boolean passwordExpired
+      }
+      </code>
+
+  section
+    h3 Constructing New Objects
+    pre.
+      <code class="groovy">
+      def employee = new Employee()
+      employee.firstName = 'Steve'
+      employee.lastName = 'Rogers'
+      employee.username = 'srogers'
+      employee.password = 'CaptainAmerica'
+      </code>
+
+  section
+    h3 name-argument Constructor
+
+    pre.
+      <code class="groovy" data-trim>
+      def employee = new Employee(firstName: 'Steve',
+                                  lastName: 'Rogers',
+                                  username: 'srogers',
+                                  password: 'CaptainAmerica')
+      </code>
+
+  section
+    h3 String
+    p Traditional String literal uses single quotes (')
+    br
+    pre.
+      <code class="groovy">
+      def employee = new Employee(firstName: 'Steve', username: 'srogers')
+      println 'Hello ' + employee.firstName + ' (' + employee.username + ')'
+      ==> Hello Steve (srogers)
+      </code>
+
+  section
+    h3 Groovy Strings or GStrings
+    ul
+      li supports embedded expressions
+      li uses double (") quotes
+      li braces are optional for simple expressions
+    br
+    pre.
+      <code class="groovy">
+      def employee = new Employee(firstName: 'Steve', username: 'srogers')
+      println "Hello ${employee.firstName} (${employee.username})"
+      ==> Hello Steve (srogers)
+      </code>
+
+  section
+    h3 Creating Method - Similar to Java
+    ul
+      li same as functions, procedures
+      li go inside of a class
+    br
+    pre.
+      <code class="groovy">
+      scope returnType methodName(zeroOrMoreArguments){
+        methodBody
+      }
+      </code>
+    br
+    pre.
+      <code class="groovy">
+      public String toString() {
+        return "first: ${firstName} last: ${lastName} username: ${username}"
+      }
+      </code>
+
+  section
+    h3 Groovier Methods
+    ul
+      li scope is optional - default is public
+      li return type is optional - use def keyword for dynamically typed return value
+      li types are optional for method arguments
+      li return keyword is optional - value of last statement is returned
+    br
+    pre.
+      <code class="java">
+      // Java
+      public String createGreeting(String greeting) {
+          return greeting + firstName;
+      }
+      </code>
+    br
+    pre.
+      <code class="groovy">
+      // Groovy
+      def createGreeting(greeting) {
+          "$greeting $firstName"
+      }
+      </code>
+
+  section
+    h3 Using a Method
+    pre.
+      <code class="groovy">
+      def steveRogers = new Employee(username: 'srogers',
+                                    password: 'CaptainAmerica'
+                                    firstName: 'Steve',
+                                    lastName: 'Rogers')
+      // invoke a method on an object
+      println steveRogers.toString()
+      ==> first: Steve last: Rogers username: srogers
+
+      // call a method, passing a method argument
+      println steveRogers.createGreeting('hello')
+      ==> hello Steve
+      </code>
+
+  +lecture-title-page("Groovy Basics", "Lab 2")
