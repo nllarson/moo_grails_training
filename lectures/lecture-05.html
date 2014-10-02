@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Lecture 05 - Grails Overview</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Lecture 05 - Grails Overview">
+    <link href="/moo_grails_training/assets/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/moo_grails_training/assets/js/angular.js"></script>
+    <script type="text/javascript">
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = '/moo_grails_training/assets/css/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+      
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="opi-logo"></div>
+      <div class="slides">
+        <section data-state="index-slide" class="index-section">
+          <h3>Grails Overview</h3>
+          <h4>Lecture 05</h4>
+        </section>
+        <section><img src="/moo_grails_training/assets/img/lecture/lecture05/grailsmvc.png" class="no-style"></section>
+        <section>
+          <h3>A Web Application "Vertical Slice"</h3>
+          <ul>
+            <li>javascript   	- Dynamic behavior in the browser</li>
+            <li>servlets		- HTML page generation</li>
+            <li>controllers  	- Application Form Controllers + Tests</li>
+            <li>command   	- Display objects + Tests</li>
+            <li>validation		- Validation and constraints + Tests</li>
+            <li>services   	     - Service Layer + Tests</li>
+            <li>queries  		- Data access + Tests</li>
+            <li>domain 		- Domain Model + Tests</li>
+            <li>DDL			- Database Schema</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Grails Application Stack</h3><img src="/moo_grails_training/assets/img/lecture/lecture05/grailsArchitecture.jpg" class="no-style">
+        </section>
+        <section>
+          <h3>Plugins</h3>
+          <p>Grails is built on Plugins!</p>
+          <ul>
+            <li><a href="https://grails.org/plugins/" target="_blank">https://grails.org/plugins</a></li>
+            <li>There are 500+ plugins available</li>
+            <li>They are light-weight and easy to write</li>
+            <li>They are easy to install</li>
+            <li>Installation is scoped by app, not system</li>
+          </ul>
+          <p>They often include additional scripts to provide additional functionality:</p>
+          <ul>
+            <li>Scaffolding template support for login pages</li>
+            <li>Spring Security default tables for users and roles</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Why Grails?</h3>
+          <ul>
+            <li>Proven productivity - 30-45% in real-world enterprise projects</li>
+            <li>Solve many problems with Java projects</li>
+            <ul>
+              <li>Common Build System</li>
+              <li>Common Deployment</li>
+              <li>Common Technology Stack</li>
+              <li>Common Configuration</li>
+            </ul>
+            <li>Easier to Build and Maintain</li>
+            <ul>
+              <li>Write less code!  (Convention / Configuration)</li>
+              <li>Common project structure across all Grails projects</li>
+            </ul>
+          </ul>
+        </section>
+        <section>
+          <h3>Grails Project Conventions</h3>
+          <p>Complete application structure is scaffolded with predefined directories for:</p>
+          <ul>
+            <li>Controllers</li>
+            <li>Domain classes</li>
+            <li>views</li>
+            <li>Custom Java or Groovy classes</li>
+            <li>i18n Messages</li>
+            <li>templates</li>
+            <li>Automated Build / Test Scripts</li>
+            <li>development / test / production / Custom Environments</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Need Help?</h3>
+          <ul>
+            <li><a href="http://grails.org/">http://grails.org</a></li>
+            <li><a href="http://grails.org/Documentation">http://grails.org/Documentation</a></li>
+            <ul>
+              <li>Since we are on 2.1.1, we should use that version of the documents</li>
+              <li><a href="http://grails.org/doc/2.1.1/">http://grails.org/doc/2.1.1</a></li>
+            </ul>
+            <li><a href="http://stackoverflow.com/tags/grails/info">Stack Overflow</a></li>
+            <li><a href="http://www.google.com">Google</a></li>
+            <li><a href="https://twitter.com/hashtag/grailsfw">Twitter #grailsfw</a></li>
+          </ul>
+        </section>
+        <section data-state="index-slide" class="index-section">
+          <h3>GGTS Demo</h3>
+          <h4>Let's do this!</h4>
+        </section>
+        <section data-state="index-slide" class="index-section">
+          <h3>Environment Setup</h3>
+          <h4>Make you machine work!</h4>
+        </section>
+        <section>
+          <h3>Creating a working directory</h3>
+          <ul>
+            <li>Open the global_server/scratch drive</li>
+            <li>Open the IntroToGrails folder</li>
+            <li>Copy/Paste the grails-training-materials.zip to your pc's desktop.</li>
+            <li>Unzip the package onto your desktop</li>
+            <li>Just use your desktop for now. We'll move these files in a moment</li>
+            <li>Don't put it on your Y drive and unzip. The network makes this very slow.</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Grails Config</h3>
+          <ul>
+            <li>In your Y: drive</li>
+            <li>Open the folder '.grails'</li>
+            <li>Copy/Paste grails configs into this directory</li>
+            <ul>
+              <li>ProxySettings.groovy</li>
+              <li>settings.groovy</li>
+            </ul>
+            <li>These files are in the class materials</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Class Materials</h3>
+          <ul>
+            <li>Copy these files to a place you want</li>
+            <ul>
+              <li>labs.pdf</li>
+              <li>timeclock.png</li>
+              <li><a href="http://nllarson.github.io/moo_grails_training">Slide Deck</a></li>
+            </ul>
+          </ul>
+          <p>You will be using these during the class, so put them where you can find them easily</p>
+        </section>
+        <section>
+          <section>
+            <h3>Setup Workspace</h3>
+            <ul>
+              <li>Copy the entire intro-to-grails-solved.zip into your C:/GGTSWorkspaces folder.</li>
+              <li>Unzip the package in the same folder.</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Setup GGTS</h3>
+            <ul>
+              <li>Open GGTS - Wait for the 'Workspace' prompt</li>
+              <ul>
+                <li>If already open, File -> Switch Workspace</li>
+              </ul>
+              <li>Explore to C:/GGTSWorkspaces/intro-to-grails-solved (Or similar)</li>
+              <li>Click OK to use this workspace</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Import the projects</h3>
+            <ul>
+              <li>You should see 2 projects in the project explorer</li>
+              <ul>
+                <li>groovyLab1_solved</li>
+                <li>timesheet_solved</li>
+              </ul>
+              <li>If the projects are not there, we will need to import them.</li>
+              <ul>
+                <li>In GGTS, select File -> Import</li>
+                <li>Select General -> Existing Files into workspace</li>
+                <li>For the root directory, browse to the workspace</li>
+                <li>Make sure both projects are checked</li>
+              </ul>
+            </ul>
+          </section>
+          <section>
+            <h3>Run the finished product</h3>
+            <ul>
+              <li>Open the timesheet_solved project</li>
+              <li>Right-click on the project</li>
+              <li>select Run As -> Grails Command (run-app)</li>
+              <li>Wait for the console to display a link to</li>
+              <li>http://localhost:8080/timesheet2</li>
+              <li>Click the link</li>
+              <li>login with username: 'john', password: 'password'</li>
+              <li>Explore!!!</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Did that work?</h3>
+            <p>Due to some firewall settings at MoO, we need to setup a proxy that allows grails to download plugins and sources from their repositories.</p>
+            <ul>
+              <li>Within the Grails prompt:</li>
+              <ul>
+                <li>add-proxy mutual --host=proxy_server --port=8020</li>
+                <li>set-proxy mutual</li>
+              </ul>
+            </ul>
+          </section>
+        </section>
+        <section>
+          <h3>Creating a Grails Application</h3>
+          <p>If you are lucky enough to be starting a Grails application from scratch, getting everything setup is easy to do.</p>
+          <ul>
+            <li>File -> New -> Grails Project</li>
+            <ul>
+              <li>app name becomes default package</li>
+              <li>follows common convention for projects</li>
+              <ul>
+                <li>i.e. projects with names like com.opi.timesheet</li>
+              </ul>
+              <li>creates a default project structure by convention</li>
+            </ul>
+          </ul>
+          <ul>
+            <li>App is runnable</li>
+            <li>default web server is included</li>
+            <li>built in scripts</li>
+            <li>clean, compile</li>
+            <li>automated unit and integration tests</li>
+            <li>package app into a deployable war file</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Notes for lab</h3>
+          <p>On steps to install plugins, use these versions:</p>
+          <ul>
+            <li>Spring-Security-Core 1.2.7.3 version</li>
+            <li>Joda-Time 1.4 version</li>
+          </ul>
+        </section>
+        <section data-state="index-slide" class="index-section">
+          <h3>Lab 6</h3>
+          <h4>Create a Grails Application</h4>
+        </section>
+      </div>
+    </div>
+    <script src="/moo_grails_training/assets/js/app.js"></script>
+  </body>
+</html>
