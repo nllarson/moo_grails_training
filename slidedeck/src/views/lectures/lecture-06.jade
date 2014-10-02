@@ -1,0 +1,206 @@
+doctype html
+include ../includes/mixins
+
++page("Lecture 06 - GORM")
+  +lecture-title-page("GORM - Grails Object Relational Mapper", "Lecture 06")
+
+  section
+    h3 What does that mean???
+    ul
+      li GORM provides the database, or domain, layer for Grails
+      li Based on Hibernate--really just a thin wrapper
+      li Use object-oriented syntax to access the database
+      ul
+        li Employee.get(id) - find an employee by id
+        li Employee.list() returns a list of employees
+      li Populates domain objects from the database values
+      li GORM conventions make you more productive
+
+  section
+    h3 Conventions
+    p Convention Over Configuration minimizes what has to be specified but anything can be customized using the a mapping construct.
+    p H2, an in-memory database, is used by default but any Hibernate supported database may be used. It most often used for writing automated tests.
+
+  section
+    h3 More Conventions
+    ul
+      li All classes in the domain directory are assumed to be database backed
+      ul
+        li default table name is the class name
+        li class properties are columns
+        li id surrogate key column automatically created
+        li transient version is provided for optimistic locking
+        li dateCreated, lastUpdated fields automatically populated when defined
+      li <b>DataSource.groovy</b> contains the JDBC and Hibernate details for connecting to your database
+
+  section
+    h3 But...My Domain is already defined!?!?!
+    ul
+      li mapping and constraints further refine the Data Definition Language (DDL) that is created
+      ul
+        li custom ID column
+        li custom column/table names for legacy support
+        li not forced to create a schema
+
+  section
+    h3 Hibernate
+    ul
+      li Helps with the paradigm mismatch between object-oriented software and relational DBs
+      li Maps between Groovy/Java data types and SQL/JDBC data types
+      li Extensive support for queries, populating domain objects from query results
+      li Manages transactions and caching
+      li Hibernate wraps your domain classes with dynamic proxies
+      li Knows if object has been modified (is dirty)
+      li Marshals and unmarshalls from JDBC types
+
+  section
+    h3 CRUD
+    ul
+      li save() delete() get(id) list() are provided automatically added by Grails metaclasses
+      li save(flush: true) flushes the Hibernate session
+
+  section
+    h3 Sample Domain Class
+    pre.
+      <code class="groovy">
+      class Employee {
+        String firstName
+        String middleInitial
+        String lastName
+        String email
+        String username
+        String password
+      }
+
+      new Employee(firstName: “Scott”).save()
+      Employee.list()
+      Employee.get(1).delete()
+      </code>
+
+  section
+    h3 Constraints
+    ul
+      li blank
+      li creditCard
+      li email
+      li inList
+      li matches
+      li max
+      li maxSize
+      li min
+    ul
+      li minSize
+      li notEqual
+      li nullable
+      li range
+      li scale
+      li size
+      li unique
+      li url
+      li validator
+
+  section
+    h3 More Samples - Constraints
+    pre.
+      <code class="groovy">
+      static constraints = {
+        firstName(size:1..50, blank:false)
+        middleInitial(size:0..1, blank:true, nullable:true)
+        lastName(size:1..50, blank:false)
+        email(size:1..320, blank:false, email:true)
+        username(size:3..20, unique:true, blank:false)
+        password(blank:false, password:true)
+      }
+      </code>
+
+  section
+    h3 Constraints - i18n
+    ul
+      li Grails provides default messages for constraint violations, which are displayed in the views
+      li The message formats are stored in grails-app/i18/messages.properties
+      li The messages can be customized for any validation including custom validators
+      li Constraints impact the view and the persistence layers
+
+  +lecture-title-page("Testing", "A 5000ft View")
+
+  section
+    h3 Testing Stratagies
+    ul
+      li Unit
+      li Integration
+      li Functional
+
+  section
+    section
+      h3 Unit Testing
+    section
+      ul
+        li Pared-down application context
+        li No rich features, like metaClass decorations, database, or object marshallers
+        li Must explicitly BootStrap and mimic aspects that you need
+        li No "Grails Environment" is explicitly bootstrapped
+    section
+      ul
+        li Super fast
+        li Can be run directly as JUnit tests
+        li Excellent for testing a distinct feature
+        li Like, ensuring an interaction occurs
+        li Interest is in interaction facts
+        ul
+          li verify constraints are set
+          li "a method *did* get called, as I expected"
+    section
+      ul
+        li Uses @TestFor annotation to tell Grails what you are testing.
+        ul
+          li @TestFor(Employee)
+          li @TestFor(EmployeeController)
+    section
+      ul
+        li Uses @Mock annotation to tell Grails what classes to substitute behaviour.
+      pre.
+        <code class="groovy">
+          @TestFor(EmployeeController)
+          @Mock(Employee)
+        </code>
+      ul
+        li The EmployeeController is ready for you to test.
+        li Employee domain's behavior is replaced.
+
+  section
+    section
+      h3 Integration Testing
+    section
+      ul
+        li Full application context
+        li "Grails Environment" is explicitly bootstrapped
+        li BootStrap.groovy is invoked
+        li Should be run with grails test-app integration:
+        li Employs application configuration for test environment
+
+    section
+      ul
+        li Ability to test more extensive feature sets
+        ul
+          li Domain class validation
+          li Constraints
+          li Custom data retrieval (HQL/JPQL)
+          li Data made it through an entire workflow
+        li Less granular than unit testing
+
+    section
+      ul
+        li Standard JUnit test case with annotations.
+        li @Before and @After will perform setUp and tearDown for you.
+        li @Test is the integration test that you want Grails to run for you.
+
+  +lecture-title-page("Lab 7", "-->")
+
+  section
+    h3 Lab Notes
+    ul
+      li Instructions will be explicit at first, then will get shorter.
+      li The instructions will use both menus and keyboard-shortcuts; use whatever you’re comfortable with.
+      li Don’t worry if you have problems - its the best way to learn.
+      li You can’t learn everything about Grails in a 3 days - but you can learn enough to be productive.
+      li This is a long lab - ask questions if you get stuck!

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Lecture 06 - GORM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Lecture 06 - GORM">
+    <link href="/moo_grails_training/assets/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/moo_grails_training/assets/js/angular.js"></script>
+    <script type="text/javascript">
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = '/moo_grails_training/assets/css/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+      
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="opi-logo"></div>
+      <div class="slides">
+        <section data-state="index-slide" class="index-section">
+          <h3>GORM - Grails Object Relational Mapper</h3>
+          <h4>Lecture 06</h4>
+        </section>
+        <section>
+          <h3>What does that mean???</h3>
+          <ul>
+            <li>GORM provides the database, or domain, layer for Grails</li>
+            <li>Based on Hibernate--really just a thin wrapper</li>
+            <li>Use object-oriented syntax to access the database</li>
+            <ul>
+              <li>Employee.get(id) - find an employee by id</li>
+              <li>Employee.list() returns a list of employees</li>
+            </ul>
+            <li>Populates domain objects from the database values</li>
+            <li>GORM conventions make you more productive</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Conventions</h3>
+          <p>Convention Over Configuration minimizes what has to be specified but anything can be customized using the a mapping construct.</p>
+          <p>H2, an in-memory database, is used by default but any Hibernate supported database may be used. It most often used for writing automated tests.</p>
+        </section>
+        <section>
+          <h3>More Conventions</h3>
+          <ul>
+            <li>All classes in the domain directory are assumed to be database backed</li>
+            <ul>
+              <li>default table name is the class name</li>
+              <li>class properties are columns</li>
+              <li>id surrogate key column automatically created</li>
+              <li>transient version is provided for optimistic locking</li>
+              <li>dateCreated, lastUpdated fields automatically populated when defined</li>
+            </ul>
+            <li><b>DataSource.groovy</b> contains the JDBC and Hibernate details for connecting to your database</li>
+          </ul>
+        </section>
+        <section>
+          <h3>But...My Domain is already defined!?!?!</h3>
+          <ul>
+            <li>mapping and constraints further refine the Data Definition Language (DDL) that is created</li>
+            <ul>
+              <li>custom ID column</li>
+              <li>custom column/table names for legacy support</li>
+              <li>not forced to create a schema</li>
+            </ul>
+          </ul>
+        </section>
+        <section>
+          <h3>Hibernate</h3>
+          <ul>
+            <li>Helps with the paradigm mismatch between object-oriented software and relational DBs</li>
+            <li>Maps between Groovy/Java data types and SQL/JDBC data types</li>
+            <li>Extensive support for queries, populating domain objects from query results</li>
+            <li>Manages transactions and caching</li>
+            <li>Hibernate wraps your domain classes with dynamic proxies</li>
+            <li>Knows if object has been modified (is dirty)</li>
+            <li>Marshals and unmarshalls from JDBC types</li>
+          </ul>
+        </section>
+        <section>
+          <h3>CRUD</h3>
+          <ul>
+            <li>save() delete() get(id) list() are provided automatically added by Grails metaclasses</li>
+            <li>save(flush: true) flushes the Hibernate session</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Sample Domain Class</h3>
+          <pre><code class="groovy">
+class Employee {
+  String firstName
+  String middleInitial
+  String lastName
+  String email
+  String username
+  String password
+}
+
+new Employee(firstName: “Scott”).save()
+Employee.list()
+Employee.get(1).delete()
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Constraints</h3>
+          <ul>
+            <li>blank</li>
+            <li>creditCard</li>
+            <li>email</li>
+            <li>inList</li>
+            <li>matches</li>
+            <li>max</li>
+            <li>maxSize</li>
+            <li>min</li>
+          </ul>
+          <ul>
+            <li>minSize</li>
+            <li>notEqual</li>
+            <li>nullable</li>
+            <li>range</li>
+            <li>scale</li>
+            <li>size</li>
+            <li>unique</li>
+            <li>url</li>
+            <li>validator</li>
+          </ul>
+        </section>
+        <section>
+          <h3>More Samples - Constraints</h3>
+          <pre><code class="groovy">
+static constraints = {
+  firstName(size:1..50, blank:false)
+  middleInitial(size:0..1, blank:true, nullable:true)
+  lastName(size:1..50, blank:false)
+  email(size:1..320, blank:false, email:true)
+  username(size:3..20, unique:true, blank:false)
+  password(blank:false, password:true)
+}
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Constraints - i18n</h3>
+          <ul>
+            <li>Grails provides default messages for constraint violations, which are displayed in the views</li>
+            <li>The message formats are stored in grails-app/i18/messages.properties</li>
+            <li>The messages can be customized for any validation including custom validators</li>
+            <li>Constraints impact the view and the persistence layers</li>
+          </ul>
+        </section>
+        <section data-state="index-slide" class="index-section">
+          <h3>Testing</h3>
+          <h4>A 5000ft View</h4>
+        </section>
+        <section>
+          <h3>Testing Stratagies</h3>
+          <ul>
+            <li>Unit</li>
+            <li>Integration</li>
+            <li>Functional</li>
+          </ul>
+        </section>
+        <section>
+          <section>
+            <h3>Unit Testing</h3>
+          </section>
+          <section>
+            <ul>
+              <li>Pared-down application context</li>
+              <li>No rich features, like metaClass decorations, database, or object marshallers</li>
+              <li>Must explicitly BootStrap and mimic aspects that you need</li>
+              <li>No "Grails Environment" is explicitly bootstrapped</li>
+            </ul>
+          </section>
+          <section>
+            <ul>
+              <li>Super fast</li>
+              <li>Can be run directly as JUnit tests</li>
+              <li>Excellent for testing a distinct feature</li>
+              <li>Like, ensuring an interaction occurs</li>
+              <li>Interest is in interaction facts</li>
+              <ul>
+                <li>verify constraints are set</li>
+                <li>"a method *did* get called, as I expected"</li>
+              </ul>
+            </ul>
+          </section>
+          <section>
+            <ul>
+              <li>Uses @TestFor annotation to tell Grails what you are testing.</li>
+              <ul>
+                <li>@TestFor(Employee)</li>
+                <li>@TestFor(EmployeeController)</li>
+              </ul>
+            </ul>
+          </section>
+          <section>
+            <ul>
+              <li>Uses @Mock annotation to tell Grails what classes to substitute behaviour.</li>
+            </ul>
+            <pre><code class="groovy">
+  @TestFor(EmployeeController)
+  @Mock(Employee)
+</code></pre>
+            <ul>
+              <li>The EmployeeController is ready for you to test.</li>
+              <li>Employee domain's behavior is replaced.</li>
+            </ul>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h3>Integration Testing</h3>
+          </section>
+          <section>
+            <ul>
+              <li>Full application context</li>
+              <li>"Grails Environment" is explicitly bootstrapped</li>
+              <li>BootStrap.groovy is invoked</li>
+              <li>Should be run with grails test-app integration:</li>
+              <li>Employs application configuration for test environment</li>
+            </ul>
+          </section>
+          <section>
+            <ul>
+              <li>Ability to test more extensive feature sets</li>
+              <ul>
+                <li>Domain class validation</li>
+                <li>Constraints</li>
+                <li>Custom data retrieval (HQL/JPQL)</li>
+                <li>Data made it through an entire workflow</li>
+              </ul>
+              <li>Less granular than unit testing</li>
+            </ul>
+          </section>
+          <section>
+            <ul>
+              <li>Standard JUnit test case with annotations.</li>
+              <li>@Before and @After will perform setUp and tearDown for you.</li>
+              <li>@Test is the integration test that you want Grails to run for you.</li>
+            </ul>
+          </section>
+        </section>
+        <section data-state="index-slide" class="index-section">
+          <h3>Lab 7</h3>
+          <h4>--&gt;</h4>
+        </section>
+        <section>
+          <h3>Lab Notes</h3>
+          <ul>
+            <li>Instructions will be explicit at first, then will get shorter.</li>
+            <li>The instructions will use both menus and keyboard-shortcuts; use whatever you’re comfortable with.</li>
+            <li>Don’t worry if you have problems - its the best way to learn.</li>
+            <li>You can’t learn everything about Grails in a 3 days - but you can learn enough to be productive.</li>
+            <li>This is a long lab - ask questions if you get stuck!</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+    <script src="/moo_grails_training/assets/js/app.js"></script>
+  </body>
+</html>

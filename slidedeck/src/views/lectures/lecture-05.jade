@@ -1,0 +1,195 @@
+doctype html
+include ../includes/mixins
+
++page("Lecture 05 - Grails Overview")
+  +lecture-title-page("Grails Overview", "Lecture 05")
+
+  section
+    img.no-style(src="/moo_grails_training/assets/img/lecture/lecture05/grailsmvc.png")
+
+  section
+    h3 A Web Application "Vertical Slice"
+    ul
+      li javascript   	- Dynamic behavior in the browser
+      li servlets		- HTML page generation
+      li controllers  	- Application Form Controllers + Tests
+      li command   	- Display objects + Tests
+      li validation		- Validation and constraints + Tests
+      li services   	     - Service Layer + Tests
+      li queries  		- Data access + Tests
+      li domain 		- Domain Model + Tests
+      li DDL			- Database Schema
+
+  section
+    h3 Grails Application Stack
+    img.no-style(src="/moo_grails_training/assets/img/lecture/lecture05/grailsArchitecture.jpg")
+
+  section
+    h3 Plugins
+    p Grails is built on Plugins!
+    ul
+      li <a href="https://grails.org/plugins/" target="_blank">https://grails.org/plugins</a>
+      li There are 500+ plugins available
+      li They are light-weight and easy to write
+      li They are easy to install
+      li Installation is scoped by app, not system
+    p They often include additional scripts to provide additional functionality:
+    ul
+      li Scaffolding template support for login pages
+      li Spring Security default tables for users and roles
+
+  section
+    h3 Why Grails?
+    ul
+      li Proven productivity - 30-45% in real-world enterprise projects
+      li Solve many problems with Java projects
+      ul
+        li Common Build System
+        li Common Deployment
+        li Common Technology Stack
+        li Common Configuration
+      li Easier to Build and Maintain
+      ul
+        li Write less code!  (Convention / Configuration)
+        li Common project structure across all Grails projects
+
+  section
+    h3 Grails Project Conventions
+    p Complete application structure is scaffolded with predefined directories for:
+    ul
+      li Controllers
+      li Domain classes
+      li views
+      li Custom Java or Groovy classes
+      li i18n Messages
+      li templates
+      li Automated Build / Test Scripts
+      li development / test / production / Custom Environments
+
+  section
+    h3 Need Help?
+    ul
+      li <a href="http://grails.org/">http://grails.org</a>
+      li <a href="http://grails.org/Documentation">http://grails.org/Documentation</a>
+      ul
+        li Since we are on 2.1.1, we should use that version of the documents
+        li <a href="http://grails.org/doc/2.1.1/">http://grails.org/doc/2.1.1</a>
+      li <a href="http://stackoverflow.com/tags/grails/info">Stack Overflow</a>
+      li <a href="http://www.google.com">Google</a>
+      li <a href="https://twitter.com/hashtag/grailsfw">Twitter #grailsfw</a>
+
+  +lecture-title-page("GGTS Demo", "Let's do this!")
+
+  +lecture-title-page("Environment Setup", "Make you machine work!")
+
+  section
+    h3 Creating a working directory
+    ul
+      li Open the global_server/scratch drive
+      li Open the IntroToGrails folder
+      li Copy/Paste the grails-training-materials.zip to your pc's desktop.
+      li Unzip the package onto your desktop
+      li Just use your desktop for now. We'll move these files in a moment
+      li Don't put it on your Y drive and unzip. The network makes this very slow.
+
+  section
+    h3 Grails Config
+    ul
+      li In your Y: drive
+      li Open the folder '.grails'
+      li Copy/Paste grails configs into this directory
+      ul
+        li ProxySettings.groovy
+        li settings.groovy
+      li These files are in the class materials
+
+  section
+    h3 Class Materials
+    ul
+      li Copy these files to a place you want
+      ul
+        li labs.pdf
+        li timeclock.png
+        li <a href="http://nllarson.github.io/moo_grails_training">Slide Deck</a>
+
+    p You will be using these during the class, so put them where you can find them easily
+
+  section
+    section
+      h3 Setup Workspace
+      ul
+        li Copy the entire intro-to-grails-solved.zip into your C:/GGTSWorkspaces folder.
+        li Unzip the package in the same folder.
+
+    section
+      h3 Setup GGTS
+      ul
+        li Open GGTS - Wait for the 'Workspace' prompt
+        ul
+          li If already open, File -> Switch Workspace
+        li Explore to C:/GGTSWorkspaces/intro-to-grails-solved (Or similar)
+        li Click OK to use this workspace
+
+    section
+      h3 Import the projects
+      ul
+        li You should see 2 projects in the project explorer
+        ul
+          li groovyLab1_solved
+          li timesheet_solved
+        li If the projects are not there, we will need to import them.
+        ul
+          li In GGTS, select File -> Import
+          li Select General -> Existing Files into workspace
+          li For the root directory, browse to the workspace
+          li Make sure both projects are checked
+
+    section
+      h3 Run the finished product
+      ul
+        li Open the timesheet_solved project
+        li Right-click on the project
+        li select Run As -> Grails Command (run-app)
+        li Wait for the console to display a link to
+        li http://localhost:8080/timesheet2
+        li Click the link
+        li login with username: 'john', password: 'password'
+        li Explore!!!
+
+    section
+      h3 Did that work?
+      p Due to some firewall settings at MoO, we need to setup a proxy that allows grails to download plugins and sources from their repositories.
+      ul
+        li Within the Grails prompt:
+        ul
+          li add-proxy mutual --host=proxy_server --port=8020
+          li set-proxy mutual
+
+  section
+    h3 Creating a Grails Application
+    p If you are lucky enough to be starting a Grails application from scratch, getting everything setup is easy to do.
+    ul
+      li File -> New -> Grails Project
+      ul
+        li app name becomes default package
+        li follows common convention for projects
+        ul
+          li i.e. projects with names like com.opi.timesheet
+        li creates a default project structure by convention
+
+    ul
+      li App is runnable
+      li default web server is included
+      li built in scripts
+      li clean, compile
+      li automated unit and integration tests
+      li package app into a deployable war file
+
+  section
+    h3 Notes for lab
+    p On steps to install plugins, use these versions:
+    ul
+      li Spring-Security-Core 1.2.7.3 version
+      li Joda-Time 1.4 version
+
+  +lecture-title-page("Lab 6", "Create a Grails Application")
