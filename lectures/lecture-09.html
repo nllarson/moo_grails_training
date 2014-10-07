@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Lecture 09 - Views / Layouts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Lecture 09 - Views / Layouts">
+    <link href="/moo_grails_training/assets/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/moo_grails_training/assets/js/angular.js"></script>
+    <script type="text/javascript">
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = '/moo_grails_training/assets/css/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+      
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="opi-logo"></div>
+      <div class="slides">
+        <section data-state="index-slide" class="index-section">
+          <h3>Views / Layouts</h3>
+          <h4>Lecture 09</h4>
+        </section>
+        <section>
+          <h2>Groovy Server Pages (gsp)</h2>
+          <ul>
+            <li>.gsp files work very similar to .jsp files, with the enhancement that you can:</li>
+            <li>use Groovy expressions i.e. ${} for text substitutions</li>
+            <li>g: tags are Grails aware of default Grails conventions and MVC architecture</li>
+            <li>Plugins like the Spring Security Plugin will often add tag libraries automatically</li>
+          </ul>
+          <pre><code class="html">
+&lt;div id="main-nav"&gt;
+  &lt;sec:ifLoggedIn&gt;Welcome &lt;sec:username/&gt;
+    &lt;g:link controller="logout"&gt;logout&lt;/g:link&gt;
+  &lt;/sec:ifLoggedIn&gt;
+&lt;/div>
+</code>
+</pre>
+        </section>
+        <section>
+          <h2>Layout Conventions</h2>
+          <ul>
+            <li>Place images in web-app/images folder</li>
+            <li>Global Template is in views/layouts</li>
+            <li>templates are implemented using Sitemesh</li>
+            <li>default template is views/layouts/main.gsp</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Layout Conventions - Continued</h2>
+          <ul>
+            <li>CSS files are stored in web-app/css</li>
+            <li>the default CSS styling is in webapp/css/main.css</li>
+            <li>include resources using the resource method</li>
+            <li>Templates can used to capture reusable bits of view code</li>
+            <li>Custom taglibs are easy to create and easy to; way easier than standard JSP taglibs</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Layout Example</h2>
+          <pre><code class="html">
+-- grails-app/views/layouts/main.gsp
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;&lt;g:layoutTitle default="Timesheet App"/&gt;&lt;/title&gt;
+    &lt;g:layoutHead/&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div class="menu"&gt;
+      &lt;ul&gt;
+        &lt;li&gt;Home&lt;/li&gt;
+        &lt;li&gt;Current Timesheet&lt;/li&gt;
+        &lt;li&gt;Logout&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+    &lt;div class="body"&gt;
+      &lt;g:layoutBody/&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code>
+</pre>
+        </section>
+        <section data-state="index-slide" class="index-section">
+          <h3>Lab 10</h3>
+          <h4>10.1, 10.2, 10.3, 10.4, 11.1</h4>
+        </section>
+      </div>
+    </div>
+    <script src="/moo_grails_training/assets/js/app.js"></script>
+  </body>
+</html>

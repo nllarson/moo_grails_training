@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Lecture 11 - GORM Queries</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Lecture 11 - GORM Queries">
+    <link href="/moo_grails_training/assets/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/moo_grails_training/assets/js/angular.js"></script>
+    <script type="text/javascript">
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = '/moo_grails_training/assets/css/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+      
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="opi-logo"></div>
+      <div class="slides">
+        <section data-state="index-slide" class="index-section">
+          <h3>GORM Queries</h3>
+          <h4>Lecture 11</h4>
+        </section>
+        <section>
+          <h2>Dynamic Finders</h2>
+          <ul>
+            <li>domain class .get(id) is built in</li>
+            <li>dynamic finders</li>
+            <ul>
+              <li>findBy...</li>
+              <li>
+                <pre><code class="groovy">
+def employee = Employee.findByFirstName(“John”)
+</code>
+</pre>
+              </li>
+              <li>findBy...Like</li>
+              <li>
+                <pre><code class="groovy">
+def employee = Employee.findByFirstNameLike(“John”)
+</code>
+</pre>
+              </li>
+              <li>findAllBy...</li>
+              <li>
+                <pre><code class="groovy">
+def timesheets = Timesheet.findAllByEmployee(employee)
+</code>
+</pre>
+              </li>
+            </ul>
+          </ul>
+        </section>
+        <section>
+          <h2>Dynamic Finders</h2>
+          <ul>
+            <li>LessThan</li>
+            <li>LessThanEquals</li>
+            <li>GreaterThan</li>
+            <li>GreaterThanEquals</li>
+            <li>Between</li>
+            <li>Like</li>
+            <li>Ilike (i.e. ignorecase like)</li>
+          </ul>
+          <ul>
+            <li>IsNotNull</li>
+            <li>IsNull</li>
+            <li>Not</li>
+            <li>Equal</li>
+            <li>NotEqual</li>
+            <li>And</li>
+            <li>Or</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Where Queries</h2>
+          <ul>
+            <li>Introduced in 2.0</li>
+            <li>Accepts a closure</li>
+          </ul>
+          <pre><code class="groovy">
+def query = Employee.where {
+  firstName == "Bart"
+}
+
+Employee bart = query.find()
+</code>
+</pre>
+        </section>
+        <section>
+          <h2>Where Queries</h2>
+          <ul>
+            <li>To execute the query immediately you can use one of the variants</li>
+          </ul>
+          <pre><code class="groovy">
+def results = Employee.findAll {
+  lastName == "Rogers"
+}
+
+def results = Employee.findAll(sort:'firstName') {
+  lastName == "Rogers"
+}
+</code>
+</pre>
+        </section>
+        <section>
+          <h2>Where Queries</h2>
+          <table class="reveal">
+            <thead>
+              <tr>
+                <th>Operator</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>==</td>
+                <td>Equal To</td>
+              </tr>
+              <tr>
+                <td>!=</td>
+                <td>Not Equal To</td>
+              </tr>
+              <tr>
+                <td>></td>
+                <td>Greater Than</td>
+              </tr>
+              <tr>
+                <td><</td>
+                <td>Less Than</td>
+              </tr>
+              <tr>
+                <td>>=</td>
+                <td>Greater Than or Equal To</td>
+              </tr>
+              <tr>
+                <td><=</td>
+                <td>Less Than or Equal To</td>
+              </tr>
+              <tr>
+                <td>in</td>
+                <td>Contained within given list</td>
+              </tr>
+              <tr>
+                <td>==~</td>
+                <td>Like a given String</td>
+              </tr>
+              <tr>
+                <td>=!</td>
+                <td>Case Insensitive Like</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <section>
+          <h2>Criteria Queries</h2>
+          <ul>
+            <li>Uses a Groovy builder to create a query</li>
+            <li>Can be used with createCriteria or withCriteria methods</li>
+          </ul>
+          <pre><code class="groovy">
+def c = Account.createCriteria()
+def results = c {
+  between("balance", 500, 1000)
+  eq("branch", "London")
+  or {
+    like("holderFirstName", "Fred%"
+    like("holderFirstName", "Barney%"
+  }
+  maxResults(10) // projections
+  order("holderLastName", "desc")
+}
+</code>
+</pre>
+        </section>
+        <section>
+          <h2>Hibernate Query Language (HQL)</h2>
+          <ul>
+            <li>Support for Hibernate's SQL-like query language is also available via GORM</li>
+          </ul>
+          <pre><code class="groovy">
+def author = Author.findByName("Stephen King")
+def books = Book.findAll("from Book as book where book.author = ?", [author])
+
+// With named parameters
+def author = Author.findByName("Stephen King")
+def books = Book.findAll("from Book as book where book.author = :author", [author: author])
+</code>
+</pre>
+        </section>
+        <section>
+          <h2>Lab Prep</h2>
+          <ul>
+            <li>Groovy Essentials:</li>
+            <ul>
+              <li>lists of maps</li>
+              <li>named-argument constructor</li>
+              <li>list comprehensions with .each</li>
+            </ul>
+          </ul>
+          <pre><code class="groovy">
+[
+  [timesheetDate,6.0],
+  [timesheetDate.minusDays(1), 10.0],
+  [timesheetDate.minusDays(2), 7.5],
+  [timesheetDate.minusDays(3), 8.0],
+  [timesheetDate.minusDays(4), 7.0],
+  [timesheetDate.minusDays(5), 8.0],
+  [timesheetDate.minusDays(6), 8.0],
+].each { dateWorked, hoursWorked ->
+  new TimeUnit(dateWorked:dateWorked,
+    hoursWorked:hoursWorked,
+    timesheet:timesheet2,
+    project:project2).save(flush:true)
+}
+</code>
+</pre>
+        </section>
+        <section data-state="index-slide" class="index-section">
+          <h3>Lab 13</h3>
+          <h4>GORM Queries</h4>
+        </section>
+      </div>
+    </div>
+    <script src="/moo_grails_training/assets/js/app.js"></script>
+  </body>
+</html>
