@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Lecture 10 - Customizing Views</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Lecture 10 - Customizing Views">
+    <link href="/moo_grails_training/assets/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/moo_grails_training/assets/js/angular.js"></script>
+    <script type="text/javascript">
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = '/moo_grails_training/assets/css/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+      
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="opi-logo"></div>
+      <div class="slides">
+        <section data-state="index-slide" class="index-section">
+          <h3>Customizing Views</h3>
+          <h4>Lecture 11</h4>
+        </section>
+        <section>
+          <h2>Customizing Views</h2>
+          <ul>
+            <li>Scripts to generate views</li>
+            <ul>
+              <li>grails generate-all timesheet.Employee</li>
+              <li>grails generate-views timesheet.Employee</li>
+            </ul>
+            <li>Typically flesh out the model and then use the scripts as a starting place, useful once but not afterwards.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>GSP Tags</h2>
+          <ul>
+            <li>g:each</li>
+            <li>
+              <pre><code class="html">
+&lt;g:each in="${timesheetInstance.timeUnits}" status="i" var="t"&gt;
+</code></pre>
+            </li>
+            <li>g:form</li>
+            <li>
+              <pre><code class="html">
+&lt;g:form action="delete" controller="timeUnit" method="post"&gt;
+</code></pre>
+            </li>
+            <li>g:link</li>
+            <li>
+              <pre><code class="html">
+&lt;g:link action="create" controller="timeUnit"&gt;
+</code></pre>
+            </li>
+            <li>g:hiddenField</li>
+            <li>
+              <pre><code class="html">
+&lt;g:hiddenField name="timeUnitId" value="${t?.id}" /&gt;
+</code></pre>
+            </li>
+            <li>g:actionSubmit</li>
+            <li>etc...</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Custom TagLib</h2>
+          <ul>
+            <li>A tag library (TagLib) is a "view helper" and helps with GSP rendering.  Use a taglib when...</li>
+            <li>When you've got some view code you'd like to reuse, or your GSP logic deserves unit/integration testing, or the view would be much easier to understand with simplified markup.</li>
+          </ul>
+          <p>Don't forget that they are intended to be "view helpers!"  When your tag is doing more than helping to render the view, then your controller should be doing a better/more-complete job generating the appropriate model.</p>
+        </section>
+        <section>
+          <h2>Creating a Custom TagLib</h2>
+          <ul>
+            <li>In Grails a tag library is a class with a name that ends in the convention "TagLib" and lives in the grails-app/taglib directory.</li>
+            <li>Use the create-tag-lib command create a tag library:</li>
+            <li>
+              <pre><code class="groovy">
+grails create-tag-lib format
+</code>
+</pre>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2>Custom TagLib - Simple Example</h2>
+          <pre><code class="groovy">
+import java.text.SimpleDateFormat
+
+class FormatTagLib {
+  def dateFormat = { attrs, body ->
+    out << new SimpleDateFormat(attrs.format).format(attrs.date)
+  }
+}
+</code>
+</pre>
+          <pre><code class="html">
+&lt;g:dateFormat format="dd-MM-yyyy" date="${new Date()}" /&gt;
+</code>
+</pre>
+        </section>
+        <section>
+          <h2>Custom TagLib - namespaces</h2>
+          <p>By default, tags are added to the default Grails namespace and are used with the g: prefix in GSP pages. However, you can specify a different namespace by adding a static property to your TagLib class:</p>
+          <pre><code class="groovy">
+class SimpleTagLib {
+  static namespace = "my"
+  def example = { attrs -> ... }
+}
+</code></pre>
+          <pre><code class="html">
+&lt;my:example ... /&gt;
+</code>
+</pre>
+        </section>
+        <section data-state="index-slide" class="index-section">
+          <h3>Lab 12</h3>
+          <h4>Customize Views</h4>
+        </section>
+      </div>
+    </div>
+    <script src="/moo_grails_training/assets/js/app.js"></script>
+  </body>
+</html>

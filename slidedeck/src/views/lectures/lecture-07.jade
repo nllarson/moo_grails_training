@@ -1,0 +1,115 @@
+doctype html
+include ../includes/mixins
+
++page("Lecture 07 - Advanced GORM")
+  +lecture-title-page("Advanced GORM", "Lecture 07")
+
+  section
+    h3 1-M  (One to Many)
+    h5 Parent has many Children.
+    ul
+      li Employee has many Roles
+      li Role belongs to many Employees
+      li <i>belongsTo</i> in the child table to setup 1-1, 1-M with cascading delete
+    pre.
+      <code glass="groovy">
+      class Timesheet {
+      ....
+        static belongsTo = [employee: Employee]
+      }
+      </code>
+    ul
+      li <i>hasMany</i> in the parent class to setup the collection of child table objects
+    pre.
+      <code glass="groovy">
+      class Employee {
+      ....
+        static hasMany = [timesheets: Timesheet]
+      }
+      </code>
+
+  section
+    h3 Table Generation
+    ul
+      li Adds FK to Parent table
+      img.no-style(src="/moo_grails_training/assets/img/lecture/lecture07/1-m.png")
+
+  section
+    h3 addTo....() - removeFrom....()
+    ul
+      li addTo...., removeFrom.... is automatically available  for each 1:m collection
+      li Don’t need to explicitly save()
+    pre.
+      <code glass="groovy">
+      void testTimesheetAddTo() {
+        def employee =  new Employee( firstName:'Scott',  lastName: 'Hickey',
+                email: 'scott.hickey@objectpartners.com',
+                username: 'scott', password: 'password')
+
+        println employee.validate()
+        assertNotNull employee.save()
+
+        def timesheet = new Timesheet(beginDate: new LocalDate(),
+                endDate: new LocalDate(),
+                description: "test timesheet")
+
+        employee.addToTimesheets(timesheet)
+        employee.save()
+        assertEquals(1, Employee.get(employee.id).timesheets.size())
+      }
+      </code>
+
+  section
+    h3 Lookup Tables
+    ul
+      li Define domain classes for each of the lookup tables
+      li Include a property of that type on domain class uses it
+    pre.
+      <code class="groovy">
+      class Project {
+        String description
+        static constraints = {
+          description nullable: false
+        }
+      }
+
+      class TimeUnit {
+        LocalDate dateWorked
+        BigDecimal hoursWorked
+        Project project
+      }
+      </code>
+
+  section
+    h3 Table Generation
+    ul
+      li Adds FK of Lookup table
+      img.no-style(src="/moo_grails_training/assets/img/lecture/lecture07/lookup.png")
+
+
+  section
+    h3 M-M (Many to Many)
+    ul
+      li Define the hasMany on both objects
+      li Owning side handles cascades
+      li Uses a join table by default
+    pre.
+      <code class="groovy">
+      class Book {
+        static belongsTo = Author
+        static hasMany = [authors: Author]
+      }
+
+      class Author {
+        static hasMany = [books: Book]
+      }
+      </code>
+
+  section
+    h3 Table Generation
+    ul
+      li Join Table Structure
+      img.no-style(src="/moo_grails_training/assets/img/lecture/lecture07/m-m.png")
+
+
+  +lecture-title-page("Lab 8", "Advanced GORM")

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Lecture 12 - Services</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Lecture 12 - Services">
+    <link href="/moo_grails_training/assets/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/moo_grails_training/assets/js/angular.js"></script>
+    <script type="text/javascript">
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = '/moo_grails_training/assets/css/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+      
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="opi-logo"></div>
+      <div class="slides">
+        <section data-state="index-slide" class="index-section">
+          <h3>Services</h3>
+          <h4>Lecture 12</h4>
+        </section>
+        <section>
+          <h2>Services???</h2>
+          <ul>
+            <li>the meat and potatoes of your application</li>
+            <li>where your business logic lives</li>
+            <li>promotes reuse</li>
+            <li>transaction boundry</li>
+            <li>clean separation of concerns</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Dependency Injection</h2>
+          <ul>
+            <li>Grails supports "dependency injection by convention"</li>
+            <li>Uses the property name representation of the class</li>
+            <li>Can be injected into controllers, tag libraries, etc.</li>
+          </ul>
+          <pre><code class="groovy">
+class EmployeeController {
+  def employeeService
+}
+</code>
+</pre>
+        </section>
+        <section>
+          <h2>Scopes</h2>
+          <ul>
+            <li><b>prototype</b> - A new service is created every time it is injected into another class</li>
+            <li><b>request</b> - A new service will be created per request</li>
+            <li><b>flash</b> - A new service will be created for the current and next request only</li>
+            <li><b>flow</b> - In web flows the service will exist for the scope of the flow</li>
+            <li><b>conversation</b> - In web flows the service will exist for the scope of the conversation. ie a root flow and its sub flows</li>
+            <li><b>session</b> - A service is created for the scope of a user session</li>
+            <li><b>singleton</b> (default) - Only one instance of the service ever exists</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Transactions</h2>
+          <ul>
+            <li>All services are Transactional by default</li>
+            <li>Automatic rollback occurs if a method throws a runtime exception</li>
+            <li>To turn off transactions in your service:</li>
+            <ul>
+              <li>
+                <pre><code class="groovy">
+static transactional = false
+</code>
+</pre>
+              </li>
+            </ul>
+          </ul>
+        </section>
+        <section>
+          <h2>Transaction</h2>
+          <ul>
+            <li>A common use case is to rollback a transaction when a validation error occurs.</li>
+          </ul>
+          <pre><code class="groovy">
+class EmployeeService {
+  void updatePassword(id, String password) {
+    def employee = Employee.get(id)
+    employee.password = password
+    if (!employee.validate()){
+      throw new ValidationException("Password is not valid", employee.errors)
+    }
+  }
+}
+</code>
+</pre>
+        </section>
+        <section data-state="index-slide" class="index-section">
+          <h3>Lab 14</h3>
+          <h4>Services</h4>
+        </section>
+      </div>
+    </div>
+    <script src="/moo_grails_training/assets/js/app.js"></script>
+  </body>
+</html>

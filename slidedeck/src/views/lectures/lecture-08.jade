@@ -1,0 +1,136 @@
+doctype html
+include ../includes/mixins
+
++page("Lecture 08 - Controllers")
+  +lecture-title-page("Controllers", "Lecture 08")
+
+  section
+    img.no-style(src="/moo_grails_training/assets/img/lecture/lecture08/grailsmvc.png")
+
+  section
+    h2 Controller
+    ul
+      li Gathers / directs data for use in / from views
+      li Keep them Simple!!!
+      ul
+        li Use services for transactional processes
+      li Bind Data
+
+  section
+    h2 Creating Controllers
+    ul
+      li grails create-controller Employee
+      ul
+        li grails-app/controllers/EmployeeController.groovy
+        li test/unit/EmployeeControllerTest.groovy
+      li def scaffold = true   will default provide controllers and views that support CRUD for the domain class.
+    br
+    p The scaffolding is useful for exploring the domain model but will not be used for production.
+
+  section
+    h2 Generating Controllers
+    ul
+      li grails generate-controller Employee
+      ul
+        li grails-app/controllers/EmployeeController.groovy
+        li test/unit/EmployeeControllerTest.groovy
+      li Fully populated controller that supports all CRUD operations
+    br
+    p Grails is primarily not a code generation tool. The scripts that generate classes are just helpers; everything could be written by hand and sometimes are.
+
+  section
+    h2 Generating Controllers - Continued
+    ul
+      li By convention, methods represent actions that can be called on a controller
+      li By convention, all of the HTTP request parameters are also provided automatically in map called params.
+      li Request parameters from the url can be automagically assigned to arguments, the arguments would also be cast to the correct type
+      li Example!!
+
+  section
+    h2 URL Mapping
+    ul
+      li By Convention, mapping file: conf/UrlMapping.groovy
+    pre.
+      <code class="groovy">
+      class UrlMappings {
+        static mappings = {
+          "/$controller/$action?/$id?"{
+            constraints {
+              // apply constraints here
+            }
+          }
+
+          "/" (controller: "timesheet")
+          "/login/$action?"(controller: "login")
+          "/logout/$action?" (controller: "logout")
+          "500"(view:'/error')
+        }
+      }
+      </code>
+
+  section
+    h2 Return a Model
+    ul
+      li The most simple item to return from a controller action is a map representing the model.
+      li Grails will try to serve the view with the same name as the action
+    pre.
+      <code class="groovy">
+      class EmployeeController {
+        def show(){
+          [employee: Employee.get(params.id)
+        }
+      }
+      ==> // will render grails-app/views/employee/show.gsp
+      </code>
+
+  section
+    h2 Choose your view
+    ul
+      li To tell Grails which view to serve, use the render() method.
+    pre.
+      <code class="groovy">
+      def show(Long id) {
+        def map = [person: Employee.get(id), foo: 'bar']
+        render(view: "/special/profile", model: map)
+      }
+      ==> //grails-app/views/special/profile.gsp
+      </code>
+  section
+    h2 Redirection
+    ul
+      li You can transfer to another action or even a another controller using the redirect() method.
+      ul
+        li redirect(action: login)
+        li redirect(controller: 'hulk', action: 'smash')
+        li redirect(uri: "/login.html")
+        li redirect(url: "http://grails.org")
+        li redirect(action: 'fly', params:params)
+
+  section
+    h2 Security
+    ul
+      li Spring Security Core Plugin
+      li Use annotation @Secured to secure individual methods or the whole class
+
+  section
+    pre.
+      <code class="groovy">
+      @Secured(['ROLE_USER'])
+      class EmployeeController {
+        def springSecurityService
+
+        @Secured(['ROLE_ADMIN'])
+        def edit(Long id) {
+          [employe: Employee.get(id)]
+        }
+
+        @Secured(['ROLE_ADMIN'])
+        def update(){
+          def employee = Employee.get(params.id)
+          employee.password =springSecurityService.encodePassword(params.password)
+          redirect(action:'show', params: [id: employee.id])
+        }
+      }
+      </code>
+
+  +lecture-title-page("Lab 9", "Controllers")

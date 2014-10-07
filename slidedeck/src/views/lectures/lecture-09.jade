@@ -1,0 +1,65 @@
+doctype html
+include ../includes/mixins
+
++page("Lecture 09 - Views / Layouts")
+  +lecture-title-page("Views / Layouts", "Lecture 09")
+
+  section
+    h2 Groovy Server Pages (gsp)
+    ul
+      li .gsp files work very similar to .jsp files, with the enhancement that you can:
+      li use Groovy expressions i.e. ${} for text substitutions
+      li g: tags are Grails aware of default Grails conventions and MVC architecture
+      li Plugins like the Spring Security Plugin will often add tag libraries automatically
+    pre.
+      <code class="html">
+      &lt;div id="main-nav"&gt;
+        &lt;sec:ifLoggedIn&gt;Welcome &lt;sec:username/&gt;
+          &lt;g:link controller="logout"&gt;logout&lt;/g:link&gt;
+        &lt;/sec:ifLoggedIn&gt;
+      &lt;/div>
+      </code>
+
+  section
+    h2 Layout Conventions
+    ul
+      li Place images in web-app/images folder
+      li Global Template is in views/layouts
+      li templates are implemented using Sitemesh
+      li default template is views/layouts/main.gsp
+
+  section
+    h2 Layout Conventions - Continued
+    ul
+      li CSS files are stored in web-app/css
+      li the default CSS styling is in webapp/css/main.css
+      li include resources using the resource method
+      li Templates can used to capture reusable bits of view code
+      li Custom taglibs are easy to create and easy to; way easier than standard JSP taglibs
+
+  section
+    h2 Layout Example
+    pre.
+      <code class="html">
+      -- grails-app/views/layouts/main.gsp
+      &lt;html&gt;
+        &lt;head&gt;
+          &lt;title&gt;&lt;g:layoutTitle default="Timesheet App"/&gt;&lt;/title&gt;
+          &lt;g:layoutHead/&gt;
+        &lt;/head&gt;
+        &lt;body&gt;
+          &lt;div class="menu"&gt;
+            &lt;ul&gt;
+              &lt;li&gt;Home&lt;/li&gt;
+              &lt;li&gt;Current Timesheet&lt;/li&gt;
+              &lt;li&gt;Logout&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/div&gt;
+          &lt;div class="body"&gt;
+            &lt;g:layoutBody/&gt;
+          &lt;/div&gt;
+        &lt;/body&gt;
+      &lt;/html&gt;
+      </code>
+
+  +lecture-title-page("Lab 10", "10.1, 10.2, 10.3, 10.4, 11.1")

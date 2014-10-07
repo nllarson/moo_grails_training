@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Lecture 08 - Controllers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Lecture 08 - Controllers">
+    <link href="/moo_grails_training/assets/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/moo_grails_training/assets/js/angular.js"></script>
+    <script type="text/javascript">
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = '/moo_grails_training/assets/css/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+      
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="opi-logo"></div>
+      <div class="slides">
+        <section data-state="index-slide" class="index-section">
+          <h3>Controllers</h3>
+          <h4>Lecture 08</h4>
+        </section>
+        <section><img src="/moo_grails_training/assets/img/lecture/lecture08/grailsmvc.png" class="no-style"></section>
+        <section>
+          <h2>Controller</h2>
+          <ul>
+            <li>Gathers / directs data for use in / from views</li>
+            <li>Keep them Simple!!!</li>
+            <ul>
+              <li>Use services for transactional processes</li>
+            </ul>
+            <li>Bind Data</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Creating Controllers</h2>
+          <ul>
+            <li>grails create-controller Employee</li>
+            <ul>
+              <li>grails-app/controllers/EmployeeController.groovy</li>
+              <li>test/unit/EmployeeControllerTest.groovy</li>
+            </ul>
+            <li>def scaffold = true   will default provide controllers and views that support CRUD for the domain class.</li>
+          </ul><br>
+          <p>The scaffolding is useful for exploring the domain model but will not be used for production.</p>
+        </section>
+        <section>
+          <h2>Generating Controllers</h2>
+          <ul>
+            <li>grails generate-controller Employee</li>
+            <ul>
+              <li>grails-app/controllers/EmployeeController.groovy</li>
+              <li>test/unit/EmployeeControllerTest.groovy</li>
+            </ul>
+            <li>Fully populated controller that supports all CRUD operations</li>
+          </ul><br>
+          <p>Grails is primarily not a code generation tool. The scripts that generate classes are just helpers; everything could be written by hand and sometimes are.</p>
+        </section>
+        <section>
+          <h2>Generating Controllers - Continued</h2>
+          <ul>
+            <li>By convention, methods represent actions that can be called on a controller</li>
+            <li>By convention, all of the HTTP request parameters are also provided automatically in map called params.</li>
+            <li>Request parameters from the url can be automagically assigned to arguments, the arguments would also be cast to the correct type</li>
+            <li>Example!!</li>
+          </ul>
+        </section>
+        <section>
+          <h2>URL Mapping</h2>
+          <ul>
+            <li>By Convention, mapping file: conf/UrlMapping.groovy</li>
+          </ul>
+          <pre><code class="groovy">
+class UrlMappings {
+  static mappings = {
+    "/$controller/$action?/$id?"{
+      constraints {
+        // apply constraints here
+      }
+    }
+    
+    "/" (controller: "timesheet")
+    "/login/$action?"(controller: "login")
+    "/logout/$action?" (controller: "logout")
+    "500"(view:'/error')
+  }
+}
+</code>
+</pre>
+        </section>
+        <section>
+          <h2>Return a Model</h2>
+          <ul>
+            <li>The most simple item to return from a controller action is a map representing the model.</li>
+            <li>Grails will try to serve the view with the same name as the action</li>
+          </ul>
+          <pre><code class="groovy">
+class EmployeeController {
+  def show(){
+    [employee: Employee.get(params.id)
+  }
+}
+==> // will render grails-app/views/employee/show.gsp
+</code>
+</pre>
+        </section>
+        <section>
+          <h2>Choose your view</h2>
+          <ul>
+            <li>To tell Grails which view to serve, use the render() method.</li>
+          </ul>
+          <pre><code class="groovy">
+def show(Long id) {
+  def map = [person: Employee.get(id), foo: 'bar']
+  render(view: "/special/profile", model: map)
+}
+==> //grails-app/views/special/profile.gsp
+</code></pre>
+        </section>
+        <section>
+          <h2>Redirection</h2>
+          <ul>
+            <li>You can transfer to another action or even a another controller using the redirect() method.</li>
+            <ul>
+              <li>redirect(action: login)</li>
+              <li>redirect(controller: 'hulk', action: 'smash')</li>
+              <li>redirect(uri: "/login.html")</li>
+              <li>redirect(url: "http://grails.org")</li>
+              <li>redirect(action: 'fly', params:params)</li>
+            </ul>
+          </ul>
+        </section>
+        <section>
+          <h2>Security</h2>
+          <ul>
+            <li>Spring Security Core Plugin</li>
+            <li>Use annotation @Secured to secure individual methods or the whole class</li>
+          </ul>
+        </section>
+        <section>
+          <pre><code class="groovy">
+@Secured(['ROLE_USER'])
+class EmployeeController {
+  def springSecurityService
+  
+  @Secured(['ROLE_ADMIN'])
+  def edit(Long id) {
+    [employe: Employee.get(id)]
+  }
+  
+  @Secured(['ROLE_ADMIN'])
+  def update(){
+    def employee = Employee.get(params.id)
+    employee.password =springSecurityService.encodePassword(params.password)
+    redirect(action:'show', params: [id: employee.id])
+  }
+}
+</code>
+</pre>
+        </section>
+        <section data-state="index-slide" class="index-section">
+          <h3>Lab 9</h3>
+          <h4>Controllers</h4>
+        </section>
+      </div>
+    </div>
+    <script src="/moo_grails_training/assets/js/app.js"></script>
+  </body>
+</html>

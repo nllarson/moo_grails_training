@@ -1,0 +1,97 @@
+doctype html
+include ../includes/mixins
+
++page("Lecture 10 - Customizing Views")
+  +lecture-title-page("Customizing Views", "Lecture 11")
+
+  section
+    h2 Customizing Views
+    ul
+      li Scripts to generate views
+      ul
+        li grails generate-all timesheet.Employee
+        li grails generate-views timesheet.Employee
+      li Typically flesh out the model and then use the scripts as a starting place, useful once but not afterwards.
+
+  section
+    h2 GSP Tags
+    ul
+      li g:each
+      li
+        pre.
+          <code class="html">
+          &lt;g:each in="${timesheetInstance.timeUnits}" status="i" var="t"&gt;
+          </code>
+      li g:form
+      li
+        pre.
+          <code class="html">
+          &lt;g:form action="delete" controller="timeUnit" method="post"&gt;
+          </code>
+      li g:link
+      li
+        pre.
+          <code class="html">
+          &lt;g:link action="create" controller="timeUnit"&gt;
+          </code>
+      li g:hiddenField
+      li
+        pre.
+          <code class="html">
+          &lt;g:hiddenField name="timeUnitId" value="${t?.id}" /&gt;
+          </code>
+      li g:actionSubmit
+      li etc...
+
+  section
+    h2 Custom TagLib
+    ul
+      li A tag library (TagLib) is a "view helper" and helps with GSP rendering.  Use a taglib when...
+      li When you've got some view code you'd like to reuse, or your GSP logic deserves unit/integration testing, or the view would be much easier to understand with simplified markup.
+    p Don't forget that they are intended to be "view helpers!"  When your tag is doing more than helping to render the view, then your controller should be doing a better/more-complete job generating the appropriate model.
+
+  section
+    h2 Creating a Custom TagLib
+    ul
+      li In Grails a tag library is a class with a name that ends in the convention "TagLib" and lives in the grails-app/taglib directory.
+      li Use the create-tag-lib command create a tag library:
+      li
+        pre.
+          <code class="groovy">
+          grails create-tag-lib format
+          </code>
+
+  section
+    h2 Custom TagLib - Simple Example
+    pre.
+      <code class="groovy">
+      import java.text.SimpleDateFormat
+
+      class FormatTagLib {
+        def dateFormat = { attrs, body ->
+          out << new SimpleDateFormat(attrs.format).format(attrs.date)
+        }
+      }
+      </code>
+
+    pre.
+      <code class="html">
+      &lt;g:dateFormat format="dd-MM-yyyy" date="${new Date()}" /&gt;
+      </code>
+
+  section
+    h2 Custom TagLib - namespaces
+    p By default, tags are added to the default Grails namespace and are used with the g: prefix in GSP pages. However, you can specify a different namespace by adding a static property to your TagLib class:
+    pre.
+      <code class="groovy">
+      class SimpleTagLib {
+        static namespace = "my"
+        def example = { attrs -> ... }
+      }
+      </code>
+    pre.
+      <code class="html">
+      &lt;my:example ... /&gt;
+      </code>
+
+  +lecture-title-page("Lab 12", "Customize Views")

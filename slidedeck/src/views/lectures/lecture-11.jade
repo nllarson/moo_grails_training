@@ -1,0 +1,178 @@
+doctype html
+include ../includes/mixins
+
++page("Lecture 11 - GORM Queries")
+  +lecture-title-page("GORM Queries", "Lecture 11")
+
+  section
+    h2 Dynamic Finders
+    ul
+      li domain class .get(id) is built in
+      li dynamic finders
+      ul
+        li findBy...
+        li
+          pre.
+            <code class="groovy">
+            def employee = Employee.findByFirstName(“John”)
+            </code>
+
+        li findBy...Like
+        li
+          pre.
+            <code class="groovy">
+            def employee = Employee.findByFirstNameLike(“John”)
+            </code>
+
+        li findAllBy...
+        li
+          pre.
+            <code class="groovy">
+            def timesheets = Timesheet.findAllByEmployee(employee)
+            </code>
+
+  section
+    h2 Dynamic Finders
+    ul
+      li LessThan
+      li LessThanEquals
+      li GreaterThan
+      li GreaterThanEquals
+      li Between
+      li Like
+      li Ilike (i.e. ignorecase like)
+    ul
+      li IsNotNull
+      li IsNull
+      li Not
+      li Equal
+      li NotEqual
+      li And
+      li Or
+
+  section
+    h2 Where Queries
+    ul
+      li Introduced in 2.0
+      li Accepts a closure
+    pre.
+      <code class="groovy">
+      def query = Employee.where {
+        firstName == "Bart"
+      }
+
+      Employee bart = query.find()
+      </code>
+
+  section
+    h2 Where Queries
+    ul
+      li To execute the query immediately you can use one of the variants
+    pre.
+      <code class="groovy">
+      def results = Employee.findAll {
+        lastName == "Rogers"
+      }
+
+      def results = Employee.findAll(sort:'firstName') {
+        lastName == "Rogers"
+      }
+      </code>
+
+  section
+    h2 Where Queries
+    table.reveal
+      thead
+        tr
+          th Operator
+          th Description
+      tbody
+        tr
+          td ==
+          td Equal To
+        tr
+          td !=
+          td Not Equal To
+        tr
+          td >
+          td Greater Than
+        tr
+          td <
+          td Less Than
+        tr
+          td >=
+          td Greater Than or Equal To
+        tr
+          td <=
+          td Less Than or Equal To
+        tr
+          td in
+          td Contained within given list
+        tr
+          td ==~
+          td Like a given String
+        tr
+          td =!
+          td Case Insensitive Like
+
+  section
+    h2 Criteria Queries
+    ul
+      li Uses a Groovy builder to create a query
+      li Can be used with createCriteria or withCriteria methods
+    pre.
+      <code class="groovy">
+      def c = Account.createCriteria()
+      def results = c {
+        between("balance", 500, 1000)
+        eq("branch", "London")
+        or {
+          like("holderFirstName", "Fred%"
+          like("holderFirstName", "Barney%"
+        }
+        maxResults(10) // projections
+        order("holderLastName", "desc")
+      }
+      </code>
+
+  section
+    h2 Hibernate Query Language (HQL)
+    ul
+      li Support for Hibernate's SQL-like query language is also available via GORM
+    pre.
+      <code class="groovy">
+      def author = Author.findByName("Stephen King")
+      def books = Book.findAll("from Book as book where book.author = ?", [author])
+
+      // With named parameters
+      def author = Author.findByName("Stephen King")
+      def books = Book.findAll("from Book as book where book.author = :author", [author: author])
+      </code>
+
+  section
+    h2 Lab Prep
+    ul
+      li Groovy Essentials:
+      ul
+        li lists of maps
+        li named-argument constructor
+        li list comprehensions with .each
+    pre.
+      <code class="groovy">
+      [
+        [timesheetDate,6.0],
+        [timesheetDate.minusDays(1), 10.0],
+        [timesheetDate.minusDays(2), 7.5],
+        [timesheetDate.minusDays(3), 8.0],
+        [timesheetDate.minusDays(4), 7.0],
+        [timesheetDate.minusDays(5), 8.0],
+        [timesheetDate.minusDays(6), 8.0],
+      ].each { dateWorked, hoursWorked ->
+        new TimeUnit(dateWorked:dateWorked,
+          hoursWorked:hoursWorked,
+          timesheet:timesheet2,
+          project:project2).save(flush:true)
+      }
+      </code>
+
+  +lecture-title-page("Lab 13", "GORM Queries")

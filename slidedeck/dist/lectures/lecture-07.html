@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Lecture 07 - Advanced GORM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Lecture 07 - Advanced GORM">
+    <link href="/moo_grails_training/assets/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/moo_grails_training/assets/js/angular.js"></script>
+    <script type="text/javascript">
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = '/moo_grails_training/assets/css/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+      
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="opi-logo"></div>
+      <div class="slides">
+        <section data-state="index-slide" class="index-section">
+          <h3>Advanced GORM</h3>
+          <h4>Lecture 07</h4>
+        </section>
+        <section>
+          <h3>1-M  (One to Many)</h3>
+          <h5>Parent has many Children.</h5>
+          <ul>
+            <li>Employee has many Roles</li>
+            <li>Role belongs to many Employees</li>
+            <li><i>belongsTo</i> in the child table to setup 1-1, 1-M with cascading delete</li>
+          </ul>
+          <pre><code glass="groovy">
+class Timesheet {
+....
+  static belongsTo = [employee: Employee]
+}
+</code></pre>
+          <ul>
+            <li><i>hasMany</i> in the parent class to setup the collection of child table objects</li>
+          </ul>
+          <pre><code glass="groovy">
+class Employee {
+....
+  static hasMany = [timesheets: Timesheet]
+}
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Table Generation</h3>
+          <ul>
+            <li>Adds FK to Parent table</li><img src="/moo_grails_training/assets/img/lecture/lecture07/1-m.png" class="no-style">
+          </ul>
+        </section>
+        <section>
+          <h3>addTo....() - removeFrom....()</h3>
+          <ul>
+            <li>addTo...., removeFrom.... is automatically available  for each 1:m collection</li>
+            <li>Don’t need to explicitly save()</li>
+          </ul>
+          <pre><code glass="groovy">
+void testTimesheetAddTo() {
+  def employee =  new Employee( firstName:'Scott',  lastName: 'Hickey',
+          email: 'scott.hickey@objectpartners.com',
+          username: 'scott', password: 'password')
+          
+  println employee.validate()
+  assertNotNull employee.save()
+  
+  def timesheet = new Timesheet(beginDate: new LocalDate(),
+          endDate: new LocalDate(),
+          description: "test timesheet")
+          
+  employee.addToTimesheets(timesheet)
+  employee.save()
+  assertEquals(1, Employee.get(employee.id).timesheets.size())
+}
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Lookup Tables</h3>
+          <ul>
+            <li>Define domain classes for each of the lookup tables</li>
+            <li>Include a property of that type on domain class uses it</li>
+          </ul>
+          <pre><code class="groovy">
+class Project {
+  String description
+  static constraints = {
+    description nullable: false
+  }
+}
+
+class TimeUnit {
+  LocalDate dateWorked
+  BigDecimal hoursWorked
+  Project project
+}
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Table Generation</h3>
+          <ul>
+            <li>Adds FK of Lookup table</li><img src="/moo_grails_training/assets/img/lecture/lecture07/lookup.png" class="no-style">
+          </ul>
+        </section>
+        <section>
+          <h3>M-M (Many to Many)</h3>
+          <ul>
+            <li>Define the hasMany on both objects</li>
+            <li>Owning side handles cascades</li>
+            <li>Uses a join table by default</li>
+          </ul>
+          <pre><code class="groovy">
+class Book {
+  static belongsTo = Author
+  static hasMany = [authors: Author]
+}
+
+class Author {
+  static hasMany = [books: Book]
+}
+</code>
+</pre>
+        </section>
+        <section>
+          <h3>Table Generation</h3>
+          <ul>
+            <li>Join Table Structure</li><img src="/moo_grails_training/assets/img/lecture/lecture07/m-m.png" class="no-style">
+          </ul>
+        </section>
+        <section data-state="index-slide" class="index-section">
+          <h3>Lab 8</h3>
+          <h4>Advanced GORM</h4>
+        </section>
+      </div>
+    </div>
+    <script src="/moo_grails_training/assets/js/app.js"></script>
+  </body>
+</html>
